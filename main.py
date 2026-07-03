@@ -127,7 +127,8 @@ async def upload_excel_calamp(file: UploadFile):
 
     ax[0].plot(fs01_x_values,fs01_dec_value)
     ax[1].plot(fs02_x_values,fs02_dec_value)
-    plt.show()
+    plt.savefig("fuel_analysis.png")
+    plt.close()
     
     return {"rows":len(df), "columns": list(df.columns)}
 
@@ -192,7 +193,8 @@ async def upload_excel_herox(file: UploadFile):
 
     ax[0].plot(fs01_x_values,fs01_dec_value)
     ax[1].plot(fs02_x_values,fs02_dec_value)
-    plt.show()
+    plt.savefig("fuel_analysis.png")
+    plt.close()
     
     return {"rows":len(df), "columns": list(df.columns)}
 
