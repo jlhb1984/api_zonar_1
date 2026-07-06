@@ -1,13 +1,37 @@
 import datetime
 
+import io
+import matplotlib
+matplotlib.use('Agg') # Tells Matplotlib to run without a GUI monitor
 from fastapi import FastAPI, UploadFile
+from fastapi.responses import StreamingResponse
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 app = FastAPI()
 
 no_seatbelt=pd.DataFrame()
+
+@app.get("/Charting")
+def generate_chart():
+    # 1. Clear any previous plots to avoid memory leaks/ghost lines
+    plt.clf() 
+    
+    # 2. Build your chart
+    x = [1, 2, 3, 4, 5]
+    y = [10, 15, 7, 12, 18]
+    plt.plot(x, y, marker='o')
+    plt.title("Sensor Data Pipeline")
+    
+    # 3. Save the plot to a RAM buffer instead of Render's disk
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
 
 @app.get("/Decode")
 def get_message(value:str):
