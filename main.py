@@ -68,7 +68,7 @@ async def linear_regression(file: UploadFile):
     plt.plot(X, y, 'o', label='Data points')
     plt.plot(X, model.predict(X), '-', label='Regression line')
     plt.xlabel('N code')
-    plt.ylabel(f'Gallons (Intercept: {intercept:.2f}, Slope: {slope:.2f})')
+    plt.ylabel(f'(Intercept: {intercept:.6f}, Slope: {slope:.6f})')
     plt.legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
