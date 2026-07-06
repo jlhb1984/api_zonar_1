@@ -167,12 +167,16 @@ async def upload_excel_calamp(file: UploadFile):
         fs02_x_values.append(i)
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
-
     ax[0].plot(fs01_x_values,fs01_dec_value)
     ax[1].plot(fs02_x_values,fs02_dec_value)
-    plt.show()
+    #plt.show()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
     
-    return {"rows":len(df), "columns": list(df.columns)}
 
 @app.post("/Fuel heroX analysis")
 async def upload_excel_herox(file: UploadFile):
