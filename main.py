@@ -57,6 +57,14 @@ async def linear_regression(file: UploadFile):
     model = LinearRegression()
     model.fit(X, y)
 
+    intercept = model.intercept_
+    slope = model.coef_[0]
+    headers = {
+    "X-Status": "regression created",
+    "X-Intercept": str(intercept),
+    "X-Coefficient": str(slope)
+    }
+
     plt.plot(X, y, 'o', label='Data points')
     plt.plot(X, model.predict(X), '-', label='Regression line')
     plt.xlabel('N code')
