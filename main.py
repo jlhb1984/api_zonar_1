@@ -1,9 +1,13 @@
 import datetime
-
 from fastapi import FastAPI, UploadFile
 import pandas as pd
 import numpy as np
+
+import io
+import matplotlib
+matplotlib.use('Agg')  # MUST be called before importing pyplot
 import matplotlib.pyplot as plt
+from fastapi.responses import StreamingResponse
 
 app = FastAPI()
 
@@ -11,13 +15,20 @@ no_seatbelt=pd.DataFrame()
 
 @app.get("/Decode")
 def get_message(value:str):
+    plt.clf()
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
     msb=value[10:12]
     lsb=value[8:10]
     measure=msb+lsb
     dec_measure=int(measure,16)
     a=value[8:12]
-    return {"N code: ":dec_measure}
+
+    buf=io.BytesIO()
+    plt.savefig(buf, format='png',bbox_inches='tight')
+    buf.seek(0)
+    plt.close()
+
+    return StreamingResponse(buf, media_type='image/png')
 
 """
 @app.delete("/items/{item_id}")
