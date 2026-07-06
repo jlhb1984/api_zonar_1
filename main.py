@@ -56,7 +56,18 @@ async def linear_regression(file: UploadFile):
     y = df["gallons"]*3.78541
     model = LinearRegression()
     model.fit(X, y)
-    return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
+
+    plt.plot(X, y, 'o', label='Data points')
+    plt.plot(X, model.predict(X), '-', label='Regression line')
+    plt.xlabel('N code')
+    plt.ylabel('Gallons')
+    plt.legend()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
+    #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.post("/Fuel calamp analysis")
 async def upload_excel_calamp(file: UploadFile):
