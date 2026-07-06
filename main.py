@@ -41,7 +41,7 @@ def get_message(value:str):
     measure=msb+lsb
     dec_measure=int(measure,16)
     a=value[8:12]
-    return {"N code: ":dec_measure}
+    return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
 """
 @app.delete("/items/{item_id}")
