@@ -251,32 +251,42 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     odometer=[]
     date=[]
     raw=[]
+    speed=[]            #added for speed analysis
     unit=pd.DataFrame()
 
     for i in range(0,unit_aux.shape[0]):
         odometer.append(int(unit_aux.iloc[i,2][96:104],16))
+        speed.append(int(unit_aux.iloc[i,2][142:145],16))
         date.append(unit_aux.iloc[i,2][106:118])
         raw.append(unit_aux.iloc[i,2])    
 
     unit_aux['Odometer in meters']=odometer
+    unit_aux['Speed']=speed
     unit_aux['Raw data']=raw
     unit_aux['date']=date
 
     unit=unit_aux.sort_values('date',ascending=True)
 
-    y_axis=[]
+    y_axis_o=[]
+    y_axis_s=[]
     x_axis=[]
     date=[]
     raw_data_=[]
 
     for i in range(0,unit.shape[0]):
         #print(float(fsq694_m_odometer.iloc[i,6][8:15]))
-        y_axis.append(float(unit.iloc[i,3]))
+        y_axis_o.append(float(unit.iloc[i,3]))
+        y_axis_s.append(float(unit.iloc[i,6]))
         x_axis.append(i)
         date.append(unit.iloc[i,5])
         raw_data_.append(unit.iloc[i,4])   
 
-    plt.plot(x_axis,y_axis)
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(x_axis,y_axis_o)
+    ax[1].plot(x_axis,y_axis_s)
+    #plt.show()
+
+    #plt.plot(x_axis,y_axis)                #commented for speed analysis
 
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
