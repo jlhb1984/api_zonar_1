@@ -293,21 +293,33 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     unit_odometer=pd.DataFrame()
     cont=0
 
+    #Speed chart:
+    aux_kmh=[]
+    unit_speed=pd.DataFrame()
+
     for i in range (0,df.shape[0]):
         l=len(df.iloc[i,2])
         #print('Len=',l)
         if l<180:
             aux.append(int(df.iloc[i,2][68:76],16))
             aux_miles.append((int(df.iloc[i,2][68:76],16))*0.000621371)
+            aux_kmh.append(int(df.iloc[i,2][56:58],16))
             cont=cont+1     
 
     unit_odometer['Odometer in']=aux
     unit_odometer['Odometer en miles']=aux_miles
+    unit_speed['Speed Km-h']=aux_kmh 
 
     for i in range(0,cont):
         x_axis.append(i)
     
-    plt.plot(x_axis,aux)
+    #plt.plot(x_axis,aux)
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(x_axis,aux)
+    ax[1].plot(x_axis,aux_kmh)
+    #plt.show()
+
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
