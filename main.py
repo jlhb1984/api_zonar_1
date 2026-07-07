@@ -1,15 +1,12 @@
 import datetime
-
 import io
 import matplotlib
 matplotlib.use('Agg') # Tells Matplotlib to run without a GUI monitor
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import StreamingResponse
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 
 app = FastAPI()
 
@@ -244,8 +241,7 @@ async def upload_excel_herox(file: UploadFile):
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")  
-    
+    return StreamingResponse(buf, media_type="image/png")      
 
 @app.post("/Waylens analysis")
 async def upload_csv_waylens(file: UploadFile):
@@ -274,3 +270,48 @@ async def upload_csv_waylens(file: UploadFile):
     no_seatbelt['Speed']=speed
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
+
+@app.post("/PioneerX 100 analysis")
+async def upload_csv_pioneer(file: UploadFile):
+    df= pd.read_csv(file.file)
+    unit_13=df[df['Status'].str.contains('0x252513')]
+    unit_14=df[df['Status'].str.contains('0x252514')]
+    unit_aux=pd.concat([unit_13,unit_14])
+    unit_aux['Odometer in meters']=0.0
+    odometer=[]
+    date=[]
+    raw=[]
+    unit=pd.DataFrame()
+
+    for i in range(0,unit_aux.shape[0]):
+        odometer.append(int(unit_aux.iloc[i,2][96:104],16))
+        date.append(unit_aux.iloc[i,2][106:118])
+        raw.append(unit_aux.iloc[i,2])    
+
+    unit_aux['Odometer in meters']=odometer
+    unit_aux['Raw data']=raw
+    unit_aux['date']=date
+
+    unit=unit_aux.sort_values('date',ascending=True)
+
+    y_axis=[]
+    x_axis=[]
+    date=[]
+    raw_data_=[]
+
+    for i in range(0,unit.shape[0]):
+        #print(float(fsq694_m_odometer.iloc[i,6][8:15]))
+        y_axis.append(float(unit.iloc[i,3]))
+        x_axis.append(i)
+        date.append(unit.iloc[i,5])
+        raw_data_.append(unit.iloc[i,4])
+
+        #print("Delta odometer: ",y_axis[170]-y_axis[133],'meters')    
+
+    plt.plot(x_axis,y_axis)
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
