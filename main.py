@@ -276,7 +276,7 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     for i in range(0,unit.shape[0]):
         #print(float(fsq694_m_odometer.iloc[i,6][8:15]))
         y_axis_o.append(float(unit.iloc[i,3]))
-        y_axis_s.append(float(unit.iloc[i,6]))
+        y_axis_s.append(float(unit.iloc[i,4]))
         x_axis.append(i)
         date.append(unit.iloc[i,5])
         raw_data_.append(unit.iloc[i,4])   
