@@ -273,7 +273,7 @@ async def upload_csv_waylens(file: UploadFile):
 
 @app.post("/PioneerX 100 analysis")
 async def upload_csv_pioneer(file: UploadFile):
-    df= pd.read_csv(file.file)
+    df= pd.read_excel(file.file)
     unit_13=df[df['Status'].str.contains('0x252513')]
     unit_14=df[df['Status'].str.contains('0x252514')]
     unit_aux=pd.concat([unit_13,unit_14])
