@@ -272,8 +272,8 @@ async def upload_csv_waylens(file: UploadFile):
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
 @app.post("/PioneerX 100 analysis")
-async def upload_csv_pioneer(file: UploadFile):
-    df= pd.read_excel(file.file)
+async def upload_excel_pioneer(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
     unit_13=df[df['Status'].str.contains('0x252513')]
     unit_14=df[df['Status'].str.contains('0x252514')]
     unit_aux=pd.concat([unit_13,unit_14])
@@ -315,3 +315,33 @@ async def upload_csv_pioneer(file: UploadFile):
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
+
+@app.post("/Calamp odometer & speed analysis")
+async def upload_excel_calamp_odometer_speed(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
+    aux=[]
+    aux_miles=[]
+    x_axis=[]
+    unit_odometer=pd.DataFrame()
+    cont=0
+
+    for i in range (0,df.shape[0]):
+        l=len(df.iloc[i,2])
+        #print('Len=',l)
+        if l<180:
+            aux.append(int(df.iloc[i,2][68:76],16))
+            aux_miles.append((int(df.iloc[i,2][68:76],16))*0.000621371)
+            cont=cont+1     
+
+    unit_odometer['Odometer in']=aux
+    unit_odometer['Odometer en miles']=aux_miles
+
+    for i in range(0,cont):
+        x_axis.append(i)
+    
+    plt.plot(x_axis,aux)
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")    
