@@ -12,24 +12,6 @@ app = FastAPI()
 
 no_seatbelt=pd.DataFrame()
 
-@app.get("/Charting")
-def generate_chart():
-    # 1. Clear any previous plots to avoid memory leaks/ghost lines
-    plt.clf() 
-    
-    # 2. Build your chart
-    x = [1, 2, 3, 4, 5]
-    y = [10, 15, 7, 12, 18]
-    plt.plot(x, y, marker='o')
-    plt.title("Sensor Data Pipeline")
-    
-    # 3. Save the plot to a RAM buffer instead of Render's disk
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight')
-    buf.seek(0) # Reset buffer pointer to the beginning
-    plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")
-
 @app.get("/Decode")
 def get_message(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
@@ -40,11 +22,6 @@ def get_message(value:str):
     a=value[8:12]
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
-"""
-@app.delete("/items/{item_id}")
-def delete_item(item_id: int):
-    return {"item_id": item_id, "status": "deleted"}
-"""
 @app.post("/Linear regression")
 async def linear_regression(file: UploadFile):
     df= pd.read_csv(file.file)
@@ -114,9 +91,7 @@ async def upload_excel_calamp(file: UploadFile):
                 date_fs01_dec_value.append(e0x.iloc[i,0])
                 msb=fs01[64:66]
                 lsb=fs01[62:64]
-                last_index_fs01=i        
-                
-    #print(i, raw_fuel_data.iloc[i,0] )
+                last_index_fs01=i
 
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
@@ -145,8 +120,6 @@ async def upload_excel_calamp(file: UploadFile):
                 lsb=fs02[62:64]
                 #last_index_fs02=i        
                 
-            #print(fs01_cad)   
-
     fs01_count=len(fs01_dec_value)
     fs02_count=len(fs02_dec_value)
     values_dates_fs01['Value fs01']=fs01_dec_value
@@ -166,14 +139,12 @@ async def upload_excel_calamp(file: UploadFile):
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(fs01_x_values,fs01_dec_value)
     ax[1].plot(fs02_x_values,fs02_dec_value)
-    #plt.show()
 
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")
-    
+    return StreamingResponse(buf, media_type="image/png")    
 
 @app.post("/Fuel heroX analysis")
 async def upload_excel_herox(file: UploadFile):
@@ -251,7 +222,6 @@ async def upload_csv_waylens(file: UploadFile):
     vf_camera_events_number=vf_camera_events['Unnamed: 4'].value_counts()
     vf_camera_events_categories=vf_camera_events['Unnamed: 5'].value_counts()
     vf_no_seatbelt=df[df['Unnamed: 4'].str.contains('NO_SEATBELT')]
-#vf_no_seatbelt
 
     vf_date_time=vf_no_seatbelt[vf_no_seatbelt['Unnamed: 9'].str.contains('time')]
     #vf_date_time['Unnamed: 9']
@@ -304,9 +274,7 @@ async def upload_excel_pioneer(file: UploadFile):
         y_axis.append(float(unit.iloc[i,3]))
         x_axis.append(i)
         date.append(unit.iloc[i,5])
-        raw_data_.append(unit.iloc[i,4])
-
-        #print("Delta odometer: ",y_axis[170]-y_axis[133],'meters')    
+        raw_data_.append(unit.iloc[i,4])   
 
     plt.plot(x_axis,y_axis)
 
