@@ -244,7 +244,7 @@ async def upload_csv_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-@app.post("/PioneerX 100 odomeer & speed analysis")
+@app.post("/PioneerX 100 odometer & speed analysis")
 async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     unit_13=df[df['Status'].str.contains('0x252513')]
