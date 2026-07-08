@@ -39,7 +39,7 @@ async def upload_Excel_epsilon(file: UploadFile):
     "X-Coefficient": str(slope)
     }
 
-    stats_text = f"Slope (m): {slope:.2f}\nIntercept (b): {intercept:.2f}"    
+    stats_text = f"Slope (m): {slope:.4f}\nIntercept (b): {intercept:.4f}"    
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(X, y, 'o', label='Data points')    
@@ -52,6 +52,7 @@ async def upload_Excel_epsilon(file: UploadFile):
     ax[1].plot(X, df['User'], 'o', label='Data points')
     ax[1].set_xlabel('N code')
     ax[1].set_ylabel('Gallons')
+    ax[1].set_title('Technician information')
     ax[1].legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
