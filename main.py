@@ -42,6 +42,7 @@ async def upload_Excel_epsilon(file: UploadFile):
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(X, y, 'o', label='Data points')    
     ax[0].plot(X, model.predict(X), '-', label='Regression line')
+    ax[0].plot(label=f'(Intercept: {intercept:.4f}, Slope: {slope:.4f})')
     ax[0].set_xlabel('N code')
     ax[0].set_ylabel(f'(Intercept: {intercept:.4f}, Slope: {slope:.4f})')
     ax[0].legend()
