@@ -46,7 +46,10 @@ async def upload_Excel_epsilon(file: UploadFile):
     ax[0].set_ylabel(f'(Intercept: {intercept:.4f}, Slope: {slope:.4f})')
     ax[0].legend()
     ax[1].plot(X, df['User'])
-    ax[1].plot(X, y, 'o', label='Data points')
+    ax[1].plot(X, df['User'], 'o', label='Data points')
+    ax[1].set_xlabel('N code')
+    ax[1].set_ylabel('User value of fuel level')
+    ax[1].legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
