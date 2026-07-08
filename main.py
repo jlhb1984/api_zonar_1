@@ -24,10 +24,10 @@ def get_message(value:str):
 
 @app.post("/Linear regression")
 async def linear_regression(file: UploadFile):
-    df= pd.read_csv(file.file)
+    df= pd.read_excel(file.file, engine='openpyxl')
     from sklearn.linear_model import LinearRegression
-    X = df[["n code"]]
-    y = df["gallons"]*3.78541
+    X = df[["Measured"]]
+    y = df["User"]*3.78541    
     model = LinearRegression()
     model.fit(X, y)
 
