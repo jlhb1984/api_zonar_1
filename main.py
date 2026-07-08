@@ -12,8 +12,8 @@ app = FastAPI()
 
 no_seatbelt=pd.DataFrame()
 
-@app.get("/Decode")
-def get_message(value:str):
+@app.get("/Decode Fuel message")
+def get_fuel_message(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
     msb=value[10:12]
     lsb=value[8:10]
@@ -23,7 +23,7 @@ def get_message(value:str):
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
 @app.post("/Linear regression")
-async def linear_regression(file: UploadFile):
+async def linear_regression_Excel(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     from sklearn.linear_model import LinearRegression
     X = df[["Measured"]]
@@ -42,7 +42,6 @@ async def linear_regression(file: UploadFile):
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(X, y, 'o', label='Data points')
     ax[1].plot(X, df['User'])
-
     ax[0].plot(X, y, 'o', label='Data points')
     ax[0].plot(X, model.predict(X), '-', label='Regression line')
     ax[0].set_xlabel('N code')
