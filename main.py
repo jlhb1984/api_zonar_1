@@ -39,11 +39,15 @@ async def linear_regression(file: UploadFile):
     "X-Coefficient": str(slope)
     }
 
-    plt.plot(X, y, 'o', label='Data points')
-    plt.plot(X, model.predict(X), '-', label='Regression line')
-    plt.xlabel('N code')
-    plt.ylabel(f'(Intercept: {intercept:.4f}, Slope: {slope:.4f})')
-    plt.legend()
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(X, y, 'o', label='Data points')
+    ax[1].plot(X, df['User'])
+
+    ax[0].plot(X, y, 'o', label='Data points')
+    ax[0].plot(X, model.predict(X), '-', label='Regression line')
+    ax[0].set_xlabel('N code')
+    ax[0].set_ylabel(f'(Intercept: {intercept:.4f}, Slope: {slope:.4f})')
+    ax[0].legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
