@@ -23,7 +23,7 @@ def get_fuel_message(value:str):
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
 @app.post("/Linear regression")
-async def linear_regression_Excel(file: UploadFile):
+async def upload_linear_regression_Excel_epsilon(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     from sklearn.linear_model import LinearRegression
     X = df[["Measured"]]
