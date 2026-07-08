@@ -39,6 +39,16 @@ async def upload_Excel_epsilon(file: UploadFile):
     "X-Coefficient": str(slope)
     }
 
+    # 1. Create your text string variable
+    stats_text = f"Slope (m): {slope:.2f}\nIntercept (b): {intercept:.2f}"
+
+    # 2. Use the .text() method on your specific subplot axis to render it
+    ax[0].text(0.05, 0.95, stats_text,
+           transform=ax[0].transAxes,  # CRITICAL: Note ax[0].transAxes here!
+           fontsize=10, 
+           verticalalignment='top', 
+           bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='gray', alpha=0.8))
+
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(X, y, 'o', label='Data points')    
     ax[0].plot(X, model.predict(X), '-', label='Regression line')    
