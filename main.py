@@ -45,7 +45,7 @@ async def upload_Excel_epsilon(file: UploadFile):
     ax[0].plot(X, y, 'o', label='Data points')    
     ax[0].plot(X, model.predict(X), '-', label='Regression line')    
     ax[0].set_xlabel('N code')
-    ax[0].set_title('stats_text')
+    ax[0].set_title(stats_text)
     ax[0].set_ylabel('Liters')    
     ax[0].legend()
     ax[1].plot(X, df['User'])
