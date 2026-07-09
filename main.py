@@ -147,7 +147,11 @@ async def upload_excel_calamp(file: UploadFile):
         fs02_x_values.append(i)
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
-    ax[0].plot(fs01_x_values,fs01_dec_value)
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('N code')
+    ax[0].plot(fs01_x_values,fs01_dec_value)    
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('N code')
     ax[1].plot(fs02_x_values,fs02_dec_value)
 
     buf = io.BytesIO()
@@ -214,7 +218,12 @@ async def upload_excel_herox(file: UploadFile):
         fs02_x_values.append(i)
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
-    ax[0].plot(fs01_x_values,fs01_dec_value)
+
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('N code')
+    ax[0].plot(fs01_x_values,fs01_dec_value)    
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('N code')
     ax[1].plot(fs02_x_values,fs02_dec_value)
     #plt.show()
 
