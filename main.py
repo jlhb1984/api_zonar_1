@@ -153,7 +153,7 @@ async def upload_excel_calamp(file: UploadFile):
     ax[0].plot(fs01_x_values,fs01_dec_value)    
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('N code')
-    ax[0].set_title('Tank number 2')
+    ax[1].set_title('Tank number 2')
     ax[1].plot(fs02_x_values,fs02_dec_value)
 
     buf = io.BytesIO()
@@ -228,7 +228,7 @@ async def upload_excel_herox(file: UploadFile):
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('N code')
     ax[1].plot(fs02_x_values,fs02_dec_value)
-    ax[0].set_title('Tank number 1')
+    ax[1].set_title('Tank number 2')
     #plt.show()
 
     buf = io.BytesIO()
@@ -308,7 +308,7 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     ax[0].set_xlabel('Sample number')
     ax[0].set_ylabel('Odometer in meters')
     ax[0].plot(x_axis,y_axis_o)
-    ax[0].set_title('Distance vs sample number')
+    ax[0].set_title('Odometer vs sample number')
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('Speed in Km/h')
     ax[1].set_title('Speed vs sample number')
@@ -362,7 +362,7 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     ax[1].set_ylabel('Speed in Km/h')
     ax[0].plot(x_axis,aux)
     ax[1].plot(x_axis,aux_kmh)
-    ax[0].set_title('Distance vs sample number')
+    ax[0].set_title('Odometer vs sample number')
     ax[1].set_title('Speed vs sample number')
     #plt.show()
 
