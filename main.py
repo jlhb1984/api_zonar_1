@@ -311,7 +311,7 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     ax[0].set_title('Distance vs sample number')
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('Speed in Km/h')
-    ax[0].set_title('Speed vs sample number')
+    ax[1].set_title('Speed vs sample number')
     ax[1].plot(x_axis,y_axis_s)
     #plt.show()
 
