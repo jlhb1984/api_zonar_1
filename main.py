@@ -238,8 +238,8 @@ async def upload_excel_herox(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")      
 
 @app.post("/Waylens analysis")
-async def upload_csv_waylens(file: UploadFile):
-    df= pd.read_csv(file.file)
+async def upload_excel_waylens(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
     message_number=df['Message'].value_counts()
     vf_camera_events=df[df['Message'].str.contains('CameraEvent')]
     vf_camera_events_number=vf_camera_events['Unnamed: 4'].value_counts()
