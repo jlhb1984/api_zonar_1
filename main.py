@@ -301,7 +301,11 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
         raw_data_.append(unit.iloc[i,4])   
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('Odometer meters')
     ax[0].plot(x_axis,y_axis_o)
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('Speed Km/h')
     ax[1].plot(x_axis,y_axis_s)
     #plt.show()
 
@@ -345,6 +349,11 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     #plt.plot(x_axis,aux)
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
+
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('Odometer meters')
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('Speed Km/h')
     ax[0].plot(x_axis,aux)
     ax[1].plot(x_axis,aux_kmh)
     #plt.show()
