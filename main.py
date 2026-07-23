@@ -240,6 +240,7 @@ async def upload_excel_herox(file: UploadFile):
 @app.post("/Torch odometer & speed analysis")
 async def upload_excel_torch(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')
+    df_aux=pd.DataFrame()
     raw_data_codes=[]
 
     for i in range(0,df.shape[0]):
@@ -277,7 +278,7 @@ async def upload_excel_torch(file: UploadFile):
         odometer.append(int(torch_codes_0204.iloc[i,2][72:80],16))
         date.append(torch_codes_0204.iloc[i,2][82:94])
         ext_ps.append((float(int(torch_codes_0204.iloc[i,2][126:130])))/100)
-        speed.append(int(torch_codes_0204.iloc[i,2][131:133],16))    
+        speed.append(int(torch_codes_0204.iloc[i,2][131:133]))    
         #over_speed.append(torch_codes_0204.iloc[i,2])
         gnss.append(int(torch_codes_0204.iloc[i,2][51:52],16))
         #a_code.append(torch_codes_0204.iloc[])
@@ -305,7 +306,7 @@ async def upload_excel_torch(file: UploadFile):
     torch_codes_0204['engine_load']=engine_load
 
     torch_codes_0204_ordered=torch_codes_0204.sort_values('date',ascending=True)
-    df=torch_codes_0204_ordered[['i_on','i_off','io','odometer','date','ext_ps','speed','acc_fuel_c','rpm','remain_fuel','gnss','cool_temp','Status','engine_load']]
+    df_aux=torch_codes_0204_ordered[['i_on','i_off','io','odometer','date','ext_ps','speed','acc_fuel_c','rpm','remain_fuel','gnss','cool_temp','Status','engine_load']]
 
     odometer_data=[]
     rpm_data=[]
@@ -317,7 +318,8 @@ async def upload_excel_torch(file: UploadFile):
     status=[]
 
     for i in range(0,df.shape[0]):
-        if int(df.iloc[i,3]>80000000):
+        ind_1=int(df_aux.iloc[i,3])
+        if ind_1>80000000:
             status.append(df.iloc[i,12])
             odometer_data.append(int(df.iloc[i,3]))
             #rpm_data.append(int(df.iloc[i,8]))
@@ -327,11 +329,12 @@ async def upload_excel_torch(file: UploadFile):
             x_axis_odo_speed.append(i)
 
     for i in range(0,df.shape[0]):
-            if df.iloc[i,8]<65535:
-                    status.append(df.iloc[i,12])
-                    rpm_data.append(df.iloc[i,8])
-                    date.append(df.iloc[i,4])
-                    x_axis_rpm.append(i) 
+        ind_2=int(df_aux.iloc[i,3])
+        if ind_2<65535:
+            status.append(df.iloc[i,12])
+            rpm_data.append(df.iloc[i,8])
+            date.append(df.iloc[i,4])
+            x_axis_rpm.append(i) 
 
     fig, ax = plt.subplots(1,3, figsize=(12, 6))
 
