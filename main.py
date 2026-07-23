@@ -235,34 +235,7 @@ async def upload_excel_herox(file: UploadFile):
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")      
-
-@app.post("/Waylens analysis")
-async def upload_excel_waylens(file: UploadFile):
-    df= pd.read_excel(file.file, engine='openpyxl')
-    message_number=df['Message'].value_counts()
-    vf_camera_events=df[df['Message'].str.contains('CameraEvent')]
-    vf_camera_events_number=vf_camera_events['Unnamed: 4'].value_counts()
-    vf_camera_events_categories=vf_camera_events['Unnamed: 5'].value_counts()
-    vf_no_seatbelt=df[df['Unnamed: 4'].str.contains('NO_SEATBELT')]
-
-    vf_date_time=vf_no_seatbelt[vf_no_seatbelt['Unnamed: 9'].str.contains('time')]
-    #vf_date_time['Unnamed: 9']
-    aux_date_time=[]
-    epoch_date=[]
-    vf_date_time['Date']='NaN'
-    speed=[]
-
-    for i in range(0,vf_date_time.shape[0]):
-        aux_date_time.append(float(vf_date_time.iloc[i,9][5:18])/1000)
-        epoch_date.append(datetime.datetime.fromtimestamp(aux_date_time[i]))    
-        vf_date_time.iloc[i,103]=str(epoch_date[i])
-        speed.append(vf_date_time.iloc[i,19])
-    
-    no_seatbelt['Date']=epoch_date
-    no_seatbelt['Speed']=speed
-
-    return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
+    return StreamingResponse(buf, media_type="image/png") 
 
 @app.post("/TopFly Pioneer odometer & speed analysis")
 async def upload_excel_pioneer_odometer_speed(file: UploadFile):
@@ -392,7 +365,6 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")  
 
-
 @app.post("/Calamp odometer & speed analysis")
 async def upload_excel_calamp_odometer_speed(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
@@ -441,3 +413,30 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")    
+
+@app.post("/Waylens analysis")
+async def upload_excel_waylens(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
+    message_number=df['Message'].value_counts()
+    vf_camera_events=df[df['Message'].str.contains('CameraEvent')]
+    vf_camera_events_number=vf_camera_events['Unnamed: 4'].value_counts()
+    vf_camera_events_categories=vf_camera_events['Unnamed: 5'].value_counts()
+    vf_no_seatbelt=df[df['Unnamed: 4'].str.contains('NO_SEATBELT')]
+
+    vf_date_time=vf_no_seatbelt[vf_no_seatbelt['Unnamed: 9'].str.contains('time')]
+    #vf_date_time['Unnamed: 9']
+    aux_date_time=[]
+    epoch_date=[]
+    vf_date_time['Date']='NaN'
+    speed=[]
+
+    for i in range(0,vf_date_time.shape[0]):
+        aux_date_time.append(float(vf_date_time.iloc[i,9][5:18])/1000)
+        epoch_date.append(datetime.datetime.fromtimestamp(aux_date_time[i]))    
+        vf_date_time.iloc[i,103]=str(epoch_date[i])
+        speed.append(vf_date_time.iloc[i,19])
+    
+    no_seatbelt['Date']=epoch_date
+    no_seatbelt['Speed']=speed
+
+    return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
