@@ -279,7 +279,7 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
 
     for i in range(0,unit_aux.shape[0]):
         odometer.append(int(unit_aux.iloc[i,2][96:104],16))
-        speed.append(int(unit_aux.iloc[i,2][142:145],16))
+        speed.append(int(unit_aux.iloc[i,2][142:145]))
         date.append(unit_aux.iloc[i,2][106:118])
         raw.append(unit_aux.iloc[i,2])    
 
