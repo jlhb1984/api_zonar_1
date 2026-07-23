@@ -317,7 +317,7 @@ async def upload_excel_torch(file: UploadFile):
     date=[]
     status=[]
 
-    for i in range(0,df.shape[0]):
+    for i in range(0,df_aux.shape[0]):
         ind_1=int(df_aux.iloc[i,3])
         if ind_1>80000000:
             status.append(df.iloc[i,12])
@@ -328,7 +328,7 @@ async def upload_excel_torch(file: UploadFile):
             date.append(df.iloc[i,4])
             x_axis_odo_speed.append(i)
 
-    for i in range(0,df.shape[0]):
+    for i in range(0,df_aux.shape[0]):
         ind_2=int(df_aux.iloc[i,3])
         if ind_2<65535:
             status.append(df.iloc[i,12])
