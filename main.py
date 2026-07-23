@@ -323,6 +323,76 @@ async def upload_excel_pioneer_odometer_speed(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
+@app.post("/Topfly Herox odometer & speed analysis")
+async def upload_excel_herox_odometer_speed(file: UploadFile):
+    df=pd.read_excel(file.file, engine='openpyxl')
+    unit_13=df[df['Status'].str.contains('0x252513')]
+    unit_14=df[df['Status'].str.contains('0x252514')]
+    unit_aux=pd.concat([unit_13,unit_14])
+    odometer=[]
+    #x_axis_odometer=[]
+    speed=[]
+    #x_axis_speed=[]
+    date_odometer=[]
+    date_speed=[]
+    raw_odometer=[]
+    raw_speed=[]
+    unit_odometer=pd.DataFrame()
+    unit_speed=pd.DataFrame()
+
+    for i in range(0,unit_aux.shape[0]):
+        odometer.append(int(unit_aux.iloc[i,2][96:104],16))
+        date_odometer.append(unit_aux.iloc[i,2][106:118])
+        raw_odometer.append(unit_aux.iloc[i,2])   
+
+    unit_odometer['Odometer in meters']=odometer
+    unit_odometer['Date']=date_odometer
+    unit_odometer['Raw data']=raw_odometer
+
+    for i in range(0,unit_aux.shape[0]):
+        try:
+            speed.append(int(unit_aux.iloc[i,2][142:145]))  
+            date_speed.append(unit_aux.iloc[i,2][106:118])
+            raw_speed.append(unit_aux.iloc[i,2])        
+        except:
+            pass
+
+    unit_speed['Speed']=speed
+    unit_speed['Date']=date_speed
+    unit_speed['Raw data']=raw_speed
+
+    unit_odometer_ordered=unit_odometer.sort_values('Date',ascending=True)
+    unit_speed_ordered=unit_speed.sort_values('Date',ascending=True)
+
+    x_axis_odometer=[]
+    y_axis_odometer=[]
+    x_axis_speed=[]
+    y_axis_speed=[]
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+
+    for i in range(0,unit_odometer_ordered.shape[0]):
+        x_axis_odometer.append(i)
+        y_axis_odometer.append(unit_odometer_ordered.iloc[i,0])
+
+    for i in range(0,unit_speed_ordered.shape[0]):
+        x_axis_speed.append(i)
+        y_axis_speed.append(unit_speed_ordered.iloc[i,0])
+
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('Odometer in meters')
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('Speed in Km/h')
+    ax[0].plot(x_axis_odometer,y_axis_odometer)
+    ax[1].plot(x_axis_speed,y_axis_speed)
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")  
+
+
 @app.post("/Calamp odometer & speed analysis")
 async def upload_excel_calamp_odometer_speed(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
