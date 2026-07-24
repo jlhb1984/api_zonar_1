@@ -355,16 +355,21 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Torch odometer & speed analysys")
-async def upload_excel_torch_odometer_speed(file:UploadFile):
+async def upload_excel_torch_odometer_speed(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
-    odometer_data=[]
-    rpm_data=[]
-    speed_data=[]
-    x_axis_odo_speed=[]
-    x_axis_rpm=[]
-    date=[]
-    status=[]
+
+    for i in range(0,raw_data.shape[0]):
+        raw_data_codes.append(raw_data.iloc[i,2][6:8])
+
+    raw_data['Codes']=raw_data_codes
+
+    torch_codes_02=raw_data[raw_data['Codes'].str.contains('02')]
+    torch_codes_04=raw_data[raw_data['Codes'].str.contains('04')]
+    torch_codes_0204=pd.concat([torch_codes_02,torch_codes_04])
+
+    torch_codes_0204.to_csv(r'C:\Users\Jose.Hurtado\Documents\Zonar_projects\data\zonar\torch_analysis.csv',sep=',')
+
     ignition_on_interval=[]
     ignition_off_interval=[]
     io_=[]
@@ -384,13 +389,6 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
     engine_load=[]
     remain_fuel_rate=[]
 
-    for i in range(0,raw_data.shape[0]):
-        raw_data_codes.append(raw_data.iloc[i,2][6:8])
-
-    torch_codes_02=raw_data[raw_data['Codes'].str.contains('02')]
-    torch_codes_04=raw_data[raw_data['Codes'].str.contains('04')]
-    torch_codes_0204=pd.concat([torch_codes_02,torch_codes_04])
-
     for i in range(0,torch_codes_0204.shape[0]):
         ignition_on_interval.append(int(torch_codes_0204.iloc[i,2][32:36],16))
         ignition_off_interval.append(int(torch_codes_0204.iloc[i,2][36:40],16))
@@ -398,7 +396,7 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
         odometer.append(int(torch_codes_0204.iloc[i,2][72:80],16))
         date.append(torch_codes_0204.iloc[i,2][82:94])
         ext_ps.append((float(int(torch_codes_0204.iloc[i,2][126:130])))/100)
-        speed.append(int(torch_codes_0204.iloc[i,2][131:133],16))    
+        speed.append(int(torch_codes_0204.iloc[i,2][131:133]))    
         #over_speed.append(torch_codes_0204.iloc[i,2])
         gnss.append(int(torch_codes_0204.iloc[i,2][51:52],16))
         #a_code.append(torch_codes_0204.iloc[])
@@ -413,7 +411,7 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
 
     torch_codes_0204['i_on']=ignition_on_interval
     torch_codes_0204['i_off']=ignition_off_interval
-    torch_codes_0204['io_']=io_
+    torch_codes_0204['io']=io_
     torch_codes_0204['odometer']=odometer
     torch_codes_0204['date']=date
     torch_codes_0204['ext_ps']=ext_ps
@@ -426,11 +424,23 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
     torch_codes_0204['engine_load']=engine_load
 
     torch_codes_0204_ordered=torch_codes_0204.sort_values('date',ascending=True)
+
     df=torch_codes_0204_ordered[['i_on','i_off','io','odometer','date','ext_ps','speed','acc_fuel_c','rpm','remain_fuel','gnss','cool_temp','Status','engine_load']]
 
+    odometer_data=[]
+    rpm_data=[]
+    speed_data=[]
+    fuel_data=[]
+    x_axis_odo_speed=[]
+    x_axis_rpm=[]
+    date=[]
+    status=[]
+    ind_odometer=0
+    ind_speed=0
+
     for i in range(0,df.shape[0]):
-        ind_odo_speed=int(df.iloc[i,3])
-        if int(ind_odo_speed>80000000):
+        ind_odometer=int(df.iloc[i,3])
+        if ind_odometer>80000000:
             status.append(df.iloc[i,12])
             odometer_data.append(int(df.iloc[i,3]))
             #rpm_data.append(int(df.iloc[i,8]))
@@ -440,14 +450,15 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
             x_axis_odo_speed.append(i)
 
     for i in range(0,df.shape[0]):
-        ind_rpm=int(df.iloc[i,8])
-        if ind_rpm<65535:
+        ind_speed=int(df.iloc[i,8]<65535)        
+        if df.iloc[i,8]<65535:
             status.append(df.iloc[i,12])
             rpm_data.append(df.iloc[i,8])
             date.append(df.iloc[i,4])
             x_axis_rpm.append(i) 
 
     fig, ax = plt.subplots(1,3, figsize=(12, 6))
+
     ax[0].set_xlabel('Sample number')
     ax[0].set_ylabel('Odometer in meters')
     ax[1].set_xlabel('Sample number')
@@ -458,11 +469,13 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
     ax[1].plot(x_axis_odo_speed,speed_data)
     ax[2].plot(x_axis_rpm,rpm_data)
 
-    buf=io.BytesIO()
-    plt.savefig(buf,format='png',bbox_inches='tight')
-    buf.seek(0)
-    plt.close()
-    return StreamingResponse(buf,media_type="image/png")       
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
+
+         
 
 @app.post("/Waylens analysis")
 async def upload_excel_waylens(file: UploadFile):
