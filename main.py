@@ -251,6 +251,10 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     date_speed=[]
     raw_odometer=[]
     raw_speed=[]
+    x_axis_odometer=[]
+    y_axis_odometer=[]
+    x_axis_speed=[]
+    y_axis_speed=[] 
     unit_odometer=pd.DataFrame()
     unit_speed=pd.DataFrame()
 
@@ -276,14 +280,7 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     unit_speed['Raw data']=raw_speed
 
     unit_odometer_ordered=unit_odometer.sort_values('Date',ascending=True)
-    unit_speed_ordered=unit_speed.sort_values('Date',ascending=True)
-
-    x_axis_odometer=[]
-    y_axis_odometer=[]
-    x_axis_speed=[]
-    y_axis_speed=[]
-
-    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    unit_speed_ordered=unit_speed.sort_values('Date',ascending=True)       
 
     for i in range(0,unit_odometer_ordered.shape[0]):
         x_axis_odometer.append(i)
@@ -292,6 +289,8 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     for i in range(0,unit_speed_ordered.shape[0]):
         x_axis_speed.append(i)
         y_axis_speed.append(unit_speed_ordered.iloc[i,0])
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
 
     ax[0].set_xlabel('Sample number')
     ax[0].set_ylabel('Odometer in meters')
@@ -418,12 +417,13 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
     ax[0].plot(x_axis_odo_speed,odometer_data)
     ax[1].plot(x_axis_odo_speed,speed_data)
     #ax[2].plot(x_axis_rpm,rpm_data)
-
+    """
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")      
+    """
 
 @app.post("/Calamp odometer & speed analysis")
 async def upload_excel_calamp_odometer_speed(file: UploadFile):
