@@ -407,25 +407,23 @@ async def upload_excel_torch_odometer_speed(file:UploadFile):
             date.append(df.iloc[i,4])
             x_axis_rpm.append(i) 
 
-    fig, ax = plt.subplots(1,3, figsize=(12, 6))
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
 
     ax[0].set_xlabel('Sample number')
     ax[0].set_ylabel('Odometer in meters')
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('Speed in Km/h')
-    ax[2].set_xlabel('Sample number')
-    ax[2].set_ylabel('rpm')
+    #ax[2].set_xlabel('Sample number')
+    #ax[2].set_ylabel('rpm')
     ax[0].plot(x_axis_odo_speed,odometer_data)
     ax[1].plot(x_axis_odo_speed,speed_data)
-    ax[2].plot(x_axis_rpm,rpm_data)
+    #ax[2].plot(x_axis_rpm,rpm_data)
 
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")   
-
-      
+    return StreamingResponse(buf, media_type="image/png")      
 
 @app.post("/Calamp odometer & speed analysis")
 async def upload_excel_calamp_odometer_speed(file: UploadFile):
