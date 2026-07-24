@@ -450,8 +450,8 @@ async def upload_excel_torch_odometer_speed(file: UploadFile):
             x_axis_odo_speed.append(i)
 
     for i in range(0,df.shape[0]):
-        ind_speed=int(df.iloc[i,8]<65535)        
-        if df.iloc[i,8]<65535:
+        ind_speed=int(df.iloc[i,8])        
+        if ind_speed<65535:
             status.append(df.iloc[i,12])
             rpm_data.append(df.iloc[i,8])
             date.append(df.iloc[i,4])
