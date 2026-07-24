@@ -237,6 +237,55 @@ async def upload_excel_herox(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
+@app.post("/Calamp odometer & speed analysis")
+async def upload_excel_calamp_odometer_speed(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
+    aux=[]
+    aux_miles=[]
+    x_axis=[]
+    unit_odometer=pd.DataFrame()
+    cont=0
+
+    #Speed chart:
+    aux_kmh=[]
+    unit_speed=pd.DataFrame()
+
+    for i in range (0,df.shape[0]):
+        l=len(df.iloc[i,2])
+        #print('Len=',l)
+        if l<180:
+            aux.append(int(df.iloc[i,2][68:76],16))
+            aux_miles.append((int(df.iloc[i,2][68:76],16))*0.000621371)
+            aux_kmh.append(int(df.iloc[i,2][56:58],16))
+            cont=cont+1     
+
+    unit_odometer['Odometer in']=aux
+    unit_odometer['Odometer en miles']=aux_miles
+    unit_speed['Speed Km-h']=aux_kmh 
+
+    for i in range(0,cont):
+        x_axis.append(i)
+    
+    #plt.plot(x_axis,aux)
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+
+    ax[0].set_xlabel('Sample number')
+    ax[0].set_ylabel('Odometer in meters')
+    ax[1].set_xlabel('Sample number')
+    ax[1].set_ylabel('Speed in Km/h')
+    ax[0].plot(x_axis,aux)
+    ax[1].plot(x_axis,aux_kmh)
+    ax[0].set_title('Odometer vs sample number')
+    ax[1].set_title('Speed vs sample number')
+    #plt.show()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
+
 @app.post("/Topfly Herox odometer & speed analysis")
 async def upload_excel_herox_odometer_speed(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')
@@ -304,55 +353,6 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png") 
-
-@app.post("/Calamp odometer & speed analysis")
-async def upload_excel_calamp_odometer_speed(file: UploadFile):
-    df= pd.read_excel(file.file, engine='openpyxl')
-    aux=[]
-    aux_miles=[]
-    x_axis=[]
-    unit_odometer=pd.DataFrame()
-    cont=0
-
-    #Speed chart:
-    aux_kmh=[]
-    unit_speed=pd.DataFrame()
-
-    for i in range (0,df.shape[0]):
-        l=len(df.iloc[i,2])
-        #print('Len=',l)
-        if l<180:
-            aux.append(int(df.iloc[i,2][68:76],16))
-            aux_miles.append((int(df.iloc[i,2][68:76],16))*0.000621371)
-            aux_kmh.append(int(df.iloc[i,2][56:58],16))
-            cont=cont+1     
-
-    unit_odometer['Odometer in']=aux
-    unit_odometer['Odometer en miles']=aux_miles
-    unit_speed['Speed Km-h']=aux_kmh 
-
-    for i in range(0,cont):
-        x_axis.append(i)
-    
-    #plt.plot(x_axis,aux)
-
-    fig, ax = plt.subplots(1,2, figsize=(12, 6))
-
-    ax[0].set_xlabel('Sample number')
-    ax[0].set_ylabel('Odometer in meters')
-    ax[1].set_xlabel('Sample number')
-    ax[1].set_ylabel('Speed in Km/h')
-    ax[0].plot(x_axis,aux)
-    ax[1].plot(x_axis,aux_kmh)
-    ax[0].set_title('Odometer vs sample number')
-    ax[1].set_title('Speed vs sample number')
-    #plt.show()
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight')
-    buf.seek(0) # Reset buffer pointer to the beginning
-    plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Torch odometer & speed analysys")
 async def upload_excel_torch_odometer_speed(file: UploadFile):
@@ -473,9 +473,7 @@ async def upload_excel_torch_odometer_speed(file: UploadFile):
     plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")
-
-         
+    return StreamingResponse(buf, media_type="image/png")         
 
 @app.post("/Waylens analysis")
 async def upload_excel_waylens(file: UploadFile):
