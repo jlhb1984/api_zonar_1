@@ -652,18 +652,18 @@ async def upload_excel_el_t(file: UploadFile):
     #torch_codes_0204.info()
 
     for i in range(0,df.shape[0]):
-        if df.iloc[i,11]!=255:               
-            aux_data=df.iloc[i,11]
+        if df.iloc[i,11]!=255:           
             status.append(df.iloc[i,12])
-            temp_data.append(df.iloc[i,11]-40)
+            aux_temp=int(df.iloc[i,11])
+            temp_data.append(aux_temp-40)
             x_axis_temp.append(i)         
             date.append(df.iloc[i,4])
 
     for i in range(0,df.shape[0]):
-        if df.iloc[i,13]!=255:               
-            aux_data=df.iloc[i,13]
+        if df.iloc[i,13]!=255:           
             status.append(df.iloc[i,12])
-            engine_data.append(df.iloc[i,13]-40)
+            aux_temp=int(df.iloc[i,13])
+            engine_data.append(aux_temp-40)
             x_axis_engine.append(i)         
             date.append(df.iloc[i,4])
 
