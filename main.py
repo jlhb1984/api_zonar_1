@@ -199,7 +199,7 @@ async def upload_excel_herox(file: UploadFile):
                 lsb=fs02[8:10]
                 measure=msb+lsb
                 fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0][32:44])
+                date_fs02_dec_value.append(e0x.iloc[i,2][32:44])
                 last_index_fs02=i     
 
     fs01_count=len(fs01_dec_value)
