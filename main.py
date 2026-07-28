@@ -62,7 +62,7 @@ async def upload_Excel_epsilon(file: UploadFile):
     #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.get("/Liters to gallons")
-def get_fuel_message(value:float):
+def get_liters_value(value:float):
     value_gallons=value/3.78541    
     return {"Liters":value,"Gallons:":value_gallons}
 
