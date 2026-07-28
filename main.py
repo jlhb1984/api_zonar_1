@@ -254,7 +254,7 @@ async def upload_excel_torch(file: UploadFile):
     torch_codes_04=raw_data[raw_data['Codes'].str.contains('04')]
     torch_codes_0204=pd.concat([torch_codes_02,torch_codes_04])
 
-    torch_codes_0204.to_csv(r'C:\Users\Jose.Hurtado\Documents\Zonar_projects\data\zonar\torch_analysis.csv',sep=',')
+    #torch_codes_0204.to_csv(r'C:\Users\Jose.Hurtado\Documents\Zonar_projects\data\zonar\torch_analysis.csv',sep=',')
 
     ignition_on_interval=[]
     ignition_off_interval=[]
