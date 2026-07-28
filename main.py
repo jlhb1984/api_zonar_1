@@ -179,7 +179,7 @@ async def upload_excel_herox(file: UploadFile):
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
         aux=e0x_aux.find('3E01')
-        if aux>0:
+        if ((aux>47) & (aux<49)):
             fs01=(e0x_aux[48:66])
             if len(fs01)>17:
                 msb=fs01[10:12]
@@ -192,7 +192,7 @@ async def upload_excel_herox(file: UploadFile):
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
         aux=e0x_aux.find('3E02')
-        if aux>0:
+        if ((aux>47) & (aux <49)):
             fs02=e0x_aux[48:66]
             if len(fs02)>17:
                 msb=fs02[10:12]
