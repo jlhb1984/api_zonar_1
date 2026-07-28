@@ -61,6 +61,11 @@ async def upload_Excel_epsilon(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
     #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
+@app.get("/Liters to gallons")
+def get_fuel_message(value:float):
+    value_gallons=value*0.2642    
+    return {value_gallons}
+
 @app.post("/Fuel calamp analysis")
 async def upload_excel_calamp(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
