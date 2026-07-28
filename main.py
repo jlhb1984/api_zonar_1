@@ -186,7 +186,7 @@ async def upload_excel_herox(file: UploadFile):
                 lsb=fs01[8:10]
                 measure=msb+lsb
                 fs01_dec_value.append(int(measure,16))
-                date_fs01_dec_value.append(e0x.iloc[i,0])
+                date_fs01_dec_value.append(e0x.iloc[i,2][32:44])
                 last_index_fs01=i    
 
     for i in range(0,row_number):
@@ -199,16 +199,19 @@ async def upload_excel_herox(file: UploadFile):
                 lsb=fs02[8:10]
                 measure=msb+lsb
                 fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0])
+                date_fs02_dec_value.append(e0x.iloc[i,0][32:44])
                 last_index_fs02=i     
 
     fs01_count=len(fs01_dec_value)
     fs02_count=len(fs02_dec_value)
     #print('El Ncode en decimal es:')
     values_dates_fs01['value']=fs01_dec_value
-    values_dates_fs01['date']=date_fs01_dec_value
+    values_dates_fs01['date']=date_fs01_dec_value    
     values_dates_fs02['value']=fs02_dec_value
     values_dates_fs02['date']=date_fs02_dec_value
+
+    values_dates_fs01_ordered=values_dates_fs01.sort_values('date',ascending=True)
+    values_dates_fs02_ordered=values_dates_fs02.sort_values('date',ascending=True)
 
     fs01_x_values=[]
     fs02_x_values=[]
@@ -223,11 +226,11 @@ async def upload_excel_herox(file: UploadFile):
 
     ax[0].set_xlabel('Sample number')
     ax[0].set_ylabel('N code')
-    ax[0].plot(fs01_x_values,fs01_dec_value)
+    ax[0].plot(fs01_x_values,values_dates_fs01_ordered['value'])
     ax[0].set_title('Tank number 1')    
     ax[1].set_xlabel('Sample number')
     ax[1].set_ylabel('N code')
-    ax[1].plot(fs02_x_values,fs02_dec_value)
+    ax[1].plot(fs02_x_values,values_dates_fs02_ordered['value'])
     ax[1].set_title('Tank number 2')
     #plt.show()
 
