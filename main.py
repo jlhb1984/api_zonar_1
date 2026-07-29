@@ -62,12 +62,12 @@ async def subir_Excel_epsilon(file: UploadFile):
     #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.get("/Pasar litros a galones")
-def obtener_valor_en_litros(value:float):
+def digitar_valor_en_litros(value:float):
     value_gallons=value/3.78541  
     return {"Liters":value,"Gallons:":value_gallons}
 
 @app.post("/Análisis de combsutible Calamp")
-async def obtener_excel_calamp(file: UploadFile):
+async def subir_excel_calamp(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df["Status"].str.contains('3E0')]
     row_number=e0x.shape[0]
