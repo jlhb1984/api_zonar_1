@@ -63,7 +63,7 @@ async def upload_Excel_epsilon(file: UploadFile):
 
 @app.get("/Liters to gallons")
 def get_liters_value(value:float):
-    value_gallons=value/3.78541    
+    value_gallons=value/3.785410    
     return {"Liters":value,"Gallons:":value_gallons}
 
 @app.post("/Fuel calamp analysis")
