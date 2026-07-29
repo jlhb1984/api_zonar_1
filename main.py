@@ -13,7 +13,7 @@ app = FastAPI()
 no_seatbelt=pd.DataFrame()
 
 @app.get("/Decodificar trama de combustible")
-def obtener_trama_de_combustible(value:str):
+def Digitar_trama_de_combustible(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
     msb=value[10:12]
     lsb=value[8:10]
