@@ -12,8 +12,8 @@ app = FastAPI()
 
 no_seatbelt=pd.DataFrame()
 
-@app.get("/Decode Fuel message")
-def get_fuel_message(value:str):
+@app.get("/Decodificar trama de combustible")
+def get_trama_de_combustible(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
     msb=value[10:12]
     lsb=value[8:10]
@@ -22,7 +22,7 @@ def get_fuel_message(value:str):
     a=value[8:12]
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
-@app.post("/Linear regression")
+@app.post("/Regresión lineal")
 async def upload_Excel_epsilon(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     from sklearn.linear_model import LinearRegression
@@ -61,12 +61,12 @@ async def upload_Excel_epsilon(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
     #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
-@app.get("/Liters to gallons")
+@app.get("/Pasar litros a galones")
 def get_liters_value(value:float):
     value_gallons=value/3.78541  
     return {"Liters":value,"Gallons:":value_gallons}
 
-@app.post("/Fuel calamp analysis")
+@app.post("/Análisis de combsutible Calamp")
 async def upload_excel_calamp(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df["Status"].str.contains('3E0')]
@@ -167,7 +167,7 @@ async def upload_excel_calamp(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")    
 
-@app.post("/Fuel heroX analysis")
+@app.post("/Análisis de combsutible HeroX")
 async def upload_excel_herox(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df['Status'].str.contains('3E0')]
@@ -247,7 +247,7 @@ async def upload_excel_herox(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Fuel Torch analysys")
+@app.post("/Análisis de combsutible Torch")
 async def upload_excel_torch(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
@@ -346,7 +346,7 @@ async def upload_excel_torch(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Calamp odometer & speed analysis")
+@app.post("/Análisis de odómetro y velocidad Calamp")
 async def upload_excel_calamp_odometer_speed(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     aux=[]
@@ -395,7 +395,7 @@ async def upload_excel_calamp_odometer_speed(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Topfly Herox odometer & speed analysis")
+@app.post("/Abálisis de odpometro y velocidad HeroX")
 async def upload_excel_herox_odometer_speed(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')
     unit_13=df[df['Status'].str.contains('0x252513')]
@@ -463,7 +463,7 @@ async def upload_excel_herox_odometer_speed(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png") 
 
-@app.post("/Torch odometer & speed analysys")
+@app.post("/Análisis de odómetro y velocidad Torch")
 async def upload_excel_torch_odometer_speed(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
@@ -582,7 +582,7 @@ async def upload_excel_torch_odometer_speed(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Engine load and Temperature analysys")
+@app.post("/Análisis de carga de motor y temperatura Torch")
 async def upload_excel_el_t(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
@@ -692,7 +692,7 @@ async def upload_excel_el_t(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Waylens analysis")
+@app.post("/Análisis de eventos VidFleet")
 async def upload_excel_waylens(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     message_number=df['Message'].value_counts()
