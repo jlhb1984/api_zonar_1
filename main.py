@@ -67,7 +67,7 @@ def digitar_valor_en_litros(value:float):
     return {"Liters":value,"Gallons:":value_gallons}
 
 @app.post("/Análisis de combsutible Calamp")
-async def subir_excel_calamp(file: UploadFile):
+async def subir_excel_calamp_combustible(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df["Status"].str.contains('3E0')]
     row_number=e0x.shape[0]
@@ -168,7 +168,7 @@ async def subir_excel_calamp(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")    
 
 @app.post("/Análisis de combsutible HeroX")
-async def subir_excel_herox(file: UploadFile):
+async def subir_excel_herox_cpmbustible(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df['Status'].str.contains('3E0')]
     row_number=e0x.shape[0]
@@ -248,7 +248,7 @@ async def subir_excel_herox(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Análisis de combsutible Torch")
-async def subir_excel_torch(file: UploadFile):
+async def subir_excel_torch_combustible(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
 
@@ -347,7 +347,7 @@ async def subir_excel_torch(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Análisis de odómetro y velocidad Calamp")
-async def subir_excel_calamp_odometer_speed(file: UploadFile):
+async def subir_excel_calamp_odometro_velocidad(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     aux=[]
     aux_miles=[]
@@ -396,7 +396,7 @@ async def subir_excel_calamp_odometer_speed(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Abálisis de odómetro y velocidad HeroX")
-async def subir_excel_herox_odometer_speed(file: UploadFile):
+async def subir_excel_herox_odometro_velocidad(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')
     unit_13=df[df['Status'].str.contains('0x252513')]
     unit_14=df[df['Status'].str.contains('0x252514')]
@@ -464,7 +464,7 @@ async def subir_excel_herox_odometer_speed(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png") 
 
 @app.post("/Análisis de odómetro y velocidad Torch")
-async def subir_excel_torch_odometer_speed(file: UploadFile):
+async def subir_excel_torch_odometro_velocidad(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
 
