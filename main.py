@@ -693,7 +693,7 @@ async def subir_excel_el_t(file: UploadFile):
     return StreamingResponse(buf, media_type="image/png")
 
 @app.post("/Análisis de eventos VidFleet")
-async def subir_excel_waylens(file: UploadFile):
+async def subir_excel_preprocesado_waylens(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     message_number=df['Message'].value_counts()
     vf_camera_events=df[df['Message'].str.contains('CameraEvent')]
