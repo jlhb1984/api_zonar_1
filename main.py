@@ -66,7 +66,7 @@ def digitar_valor_en_litros(value:float):
     value_gallons=value/3.78541  
     return {"Liters":value,"Gallons:":value_gallons}
 
-@app.post("/Análisis de combsutible Calamp")
+@app.post("/Análisis de combustible Calamp")
 async def subir_excel_calamp_combustible(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df["Status"].str.contains('3E0')]
@@ -167,8 +167,8 @@ async def subir_excel_calamp_combustible(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")    
 
-@app.post("/Análisis de combsutible HeroX")
-async def subir_excel_herox_cpmbustible(file: UploadFile):
+@app.post("/Análisis de combustible HeroX")
+async def subir_excel_herox_combustible(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df['Status'].str.contains('3E0')]
     row_number=e0x.shape[0]
@@ -247,7 +247,7 @@ async def subir_excel_herox_cpmbustible(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Análisis de combsutible Torch")
+@app.post("/Análisis de combustible Torch")
 async def subir_excel_torch_combustible(file: UploadFile):
     raw_data=pd.read_excel(file.file, engine='openpyxl')
     raw_data_codes=[]
