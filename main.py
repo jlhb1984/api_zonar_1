@@ -395,7 +395,7 @@ async def subir_excel_calamp_odometro_velocidad(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Análisis de odómetro y velocidad HeroX")
+@app.post("/Análisis de odómetro y velocidad Pioneer - HeroX")
 async def subir_excel_herox_odometro_velocidad(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')
     unit_13=df[df['Status'].str.contains('0x252513')]
