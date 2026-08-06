@@ -427,9 +427,11 @@ async def subir_excel_herox_odometro_velocidad(file: UploadFile):
 
     for i in range(0,unit_aux.shape[0]):
         try:
-            speed.append(int(unit_aux.iloc[i,2][142:145]))  
-            date_speed.append(unit_aux.iloc[i,2][106:118])
-            raw_speed.append(unit_aux.iloc[i,2])        
+            lbs_ind=(bin(int(unit_aux.iloc[i,2][50:52],16) & 64))
+            if (lbs_ind=='0b1000000'):
+                speed.append(int(unit_aux.iloc[i,2][142:145]))  
+                date_speed.append(unit_aux.iloc[i,2][106:118])
+                raw_speed.append(unit_aux.iloc[i,2])
         except:
             pass
 
