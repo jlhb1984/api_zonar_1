@@ -83,58 +83,30 @@ async def subir_excel_calamp_combustible(file: UploadFile):
 
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
-        aux=e0x_aux.find('3E01')    
-        if len(e0x_aux)>0:
-            fs01=(e0x_aux[aux:aux+18])
-            if len(fs01)>17:
-                msb=fs01[10:12]
-                lsb=fs01[8:10]
-                measure=msb+lsb
-                fs01_dec_value.append(int(measure,16))
-                date_fs01_dec_value.append(e0x.iloc[i,0])            
-                msb=fs01[28:30]
-                lsb=fs01[26:28]
-                fs01_dec_value.append(int(measure,16))
-                date_fs01_dec_value.append(e0x.iloc[i,0]) 
-                msb=fs01[46:48]
-                lsb=fs01[44:46]
-                fs01_dec_value.append(int(measure,16))
-                date_fs01_dec_value.append(e0x.iloc[i,0])
-                msb=fs01[46:48]
-                lsb=fs01[44:46]
-                fs01_dec_value.append(int(measure,16))
-                date_fs01_dec_value.append(e0x.iloc[i,0])
-                msb=fs01[64:66]
-                lsb=fs01[62:64]
-                last_index_fs01=i
-
+        aux=e0x_aux.find('3E01')
+        if aux>123:                    
+            if len(e0x_aux)>0:
+                fs01=(e0x_aux[aux:aux+18])
+                if len(fs01)>17:
+                    msb=fs01[10:12]
+                    lsb=fs01[8:10]
+                    measure=msb+lsb
+                    fs01_dec_value.append(int(measure,16))
+                    date_fs01_dec_value.append(e0x.iloc[i,0])            
+                    
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
         aux=e0x_aux.find('3E02')
-        if len(e0x_aux)>0:
-            fs02=e0x_aux[aux:aux+18]
-            if len(fs02)>17:
-                msb=fs02[10:12]
-                lsb=fs02[8:10]
-                measure=msb+lsb
-                fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0])            
-                msb=fs02[28:30]
-                lsb=fs02[26:28]
-                fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0]) 
-                msb=fs02[46:48]
-                lsb=fs02[44:46]
-                fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0])
-                msb=fs02[46:48]
-                lsb=fs02[44:46]
-                fs02_dec_value.append(int(measure,16))
-                date_fs02_dec_value.append(e0x.iloc[i,0])
-                msb=fs02[64:66]
-                lsb=fs02[62:64]
-                #last_index_fs02=i        
-                
+        if aux>123:
+            if len(e0x_aux)>0:
+                fs02=e0x_aux[aux:aux+18]
+                if len(fs02)>17:
+                    msb=fs02[10:12]
+                    lsb=fs02[8:10]
+                    measure=msb+lsb
+                    fs02_dec_value.append(int(measure,16))
+                    date_fs02_dec_value.append(e0x.iloc[i,0])                       
+                    
     fs01_count=len(fs01_dec_value)
     fs02_count=len(fs02_dec_value)
     values_dates_fs01['Value fs01']=fs01_dec_value
