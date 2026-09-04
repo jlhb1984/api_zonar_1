@@ -84,7 +84,7 @@ async def subir_excel_calamp_combustible(file: UploadFile):
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
         aux=e0x_aux.find('3E01')
-        if aux>123:                    
+        if aux>100:                    
             if len(e0x_aux)>0:
                 fs01=(e0x_aux[aux:aux+18])
                 if len(fs01)>17:
@@ -97,7 +97,7 @@ async def subir_excel_calamp_combustible(file: UploadFile):
     for i in range(0,row_number):
         e0x_aux=e0x.iloc[i,2]
         aux=e0x_aux.find('3E02')
-        if aux>123:
+        if aux>100:
             if len(e0x_aux)>0:
                 fs02=e0x_aux[aux:aux+18]
                 if len(fs02)>17:
