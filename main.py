@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import requests
+#import requests
 
 app = FastAPI()
 
@@ -694,6 +694,7 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
+"""
 app.post("/MRR LATAN")
 async def subir_excel_mrr_latam(file: UploadFile):
     ubd=pd.read_excel(file.file, engine='openpyxl')
@@ -724,3 +725,4 @@ async def subir_excel_mrr_latam(file: UploadFile):
     mex_mrr=mex['Monthly Fee'].sum()
     per_mrr=per['Monthly Fee'].sum()
     return {"MRR Col: ":cop_usd.to_dict(),"MRR Mex":mex_mrr.to_dict(),"MRR Per":per_mrr.to_dict(),"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr).to_dict()}
+"""
