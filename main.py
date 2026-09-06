@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import requests
 
 app = FastAPI()
 
@@ -46,13 +47,13 @@ async def subir_Excel_epsilon(file: UploadFile):
     ax[0].plot(X, model.predict(X), '-', label='Regression line')    
     ax[0].set_xlabel('N code')
     ax[0].set_title(stats_text)
-    ax[0].set_ylabel('Liters')    
+    ax[0].set_ylabel('Litros')    
     ax[0].legend()
     ax[1].plot(X, df['User'])
     ax[1].plot(X, df['User'], 'o', label='Data points')
     ax[1].set_xlabel('N code')
-    ax[1].set_ylabel('Gallons')
-    ax[1].set_title('Technician information')
+    ax[1].set_ylabel('Galones')
+    ax[1].set_title('información del técnico')
     ax[1].legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
@@ -692,3 +693,34 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
     no_seatbelt['Speed']=speed    
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
+
+app.post("/MRR LATAN")
+async def subir_excel_mrr_latam(file: UploadFile):
+    ubd=pd.read_excel(file.file, engine='openpyxl')
+    
+    tso_mobile_colombia=ubd[ubd['Dealer'].str.contains('TSO Mobile - Colombia')]
+    tso_mobile_peru=ubd[ubd['Dealer'].str.contains('TSO Mobile Peru')]
+    uts_sistemas_kalo=ubd[ubd['Dealer'].str.contains('UTS Sistemas Kalo MX')]
+    tso_mobile_colombia_ibo_idcom=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO IDCOM')]
+    tso_mobile_colombia_ibo_segtec=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO SEGTEC')]
+    jorge_garcia=ubd[ubd['Dealer'].str.contains('Jorge Garcia')]
+    tso_peru_fg_satelital_eirl=ubd[ubd['Dealer'].str.contains('TSO Peru -   FG SATELITAL EIRL')]
+    mym_global_security=ubd[ubd['Dealer'].str.contains('MYM GLOBAL SEGURITY SAS')]
+
+    col=pd.concat([tso_mobile_colombia,tso_mobile_colombia_ibo_idcom,tso_mobile_colombia_ibo_segtec])
+    per=pd.concat([tso_mobile_peru,tso_peru_fg_satelital_eirl])
+    mex=uts_sistemas_kalo
+
+    url = "https://www.datos.gov.co/resource/ceyp-9c7c.json?$limit=1&$order=vigenciadesde DESC"
+    response = requests.get(url)
+
+    data = response.json()
+    trm = float(data[0]["valor"])
+    print(f"Current TRM: {trm} COP/USD")
+
+    cop_mrr=col['Monthly Fee'].sum()
+    #conversion=float(input("Enter TRM: "))
+    cop_usd=cop_mrr/trm
+    mex_mrr=mex['Monthly Fee'].sum()
+    per_mrr=per['Monthly Fee'].sum()
+    return {"MRR Col: ":cop_usd.to_dict(),"MRR Mex":mex_mrr.to_dict(),"MRR Per":per_mrr.to_dict(),"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr).to_dict()}
