@@ -53,7 +53,7 @@ async def subir_Excel_epsilon(file: UploadFile):
     ax[1].plot(X, df['User'], 'o', label='Data points')
     ax[1].set_xlabel('N code')
     ax[1].set_ylabel('Galones')
-    ax[1].set_title('información del técnico')
+    ax[1].set_title('Información del técnico')
     ax[1].legend()
     buf = io.BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight')
