@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 
 app = FastAPI()
 
-no_seatbelt=pd.DataFrame()
-
 @app.get("/Decodificar trama de combustible")
 def Digitar_trama_de_combustible(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
@@ -689,8 +687,8 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
         vf_date_time.iloc[i,103]=str(epoch_date[i])
         speed.append(vf_date_time.iloc[i,19])
     
-    no_seatbelt['Date']=epoch_date
-    no_seatbelt['Speed']=speed    
+    #no_seatbelt['Date']=epoch_date
+    #no_seatbelt['Speed']=speed    
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
