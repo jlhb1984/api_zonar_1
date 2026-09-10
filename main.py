@@ -7,7 +7,6 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#import requests
 
 app = FastAPI()
 
@@ -692,35 +691,8 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-"""
-app.post("/MRR LATAN")
-async def subir_excel_mrr_latam(file: UploadFile):
-    ubd=pd.read_excel(file.file, engine='openpyxl')
-    
-    tso_mobile_colombia=ubd[ubd['Dealer'].str.contains('TSO Mobile - Colombia')]
-    tso_mobile_peru=ubd[ubd['Dealer'].str.contains('TSO Mobile Peru')]
-    uts_sistemas_kalo=ubd[ubd['Dealer'].str.contains('UTS Sistemas Kalo MX')]
-    tso_mobile_colombia_ibo_idcom=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO IDCOM')]
-    tso_mobile_colombia_ibo_segtec=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO SEGTEC')]
-    jorge_garcia=ubd[ubd['Dealer'].str.contains('Jorge Garcia')]
-    tso_peru_fg_satelital_eirl=ubd[ubd['Dealer'].str.contains('TSO Peru -   FG SATELITAL EIRL')]
-    mym_global_security=ubd[ubd['Dealer'].str.contains('MYM GLOBAL SEGURITY SAS')]
-
-    col=pd.concat([tso_mobile_colombia,tso_mobile_colombia_ibo_idcom,tso_mobile_colombia_ibo_segtec])
-    per=pd.concat([tso_mobile_peru,tso_peru_fg_satelital_eirl])
-    mex=uts_sistemas_kalo
-
-    url = "https://www.datos.gov.co/resource/ceyp-9c7c.json?$limit=1&$order=vigenciadesde DESC"
-    response = requests.get(url)
-
-    data = response.json()
-    trm = float(data[0]["valor"])
-    print(f"Current TRM: {trm} COP/USD")
-
-    cop_mrr=col['Monthly Fee'].sum()
-    #conversion=float(input("Enter TRM: "))
-    cop_usd=cop_mrr/trm
-    mex_mrr=mex['Monthly Fee'].sum()
-    per_mrr=per['Monthly Fee'].sum()
-    return {"MRR Col: ":cop_usd.to_dict(),"MRR Mex":mex_mrr.to_dict(),"MRR Per":per_mrr.to_dict(),"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr).to_dict()}
-"""
+@app.post("/Hora Epoch a hora local")
+def Digitar_trama_de_combustible(value:str):
+    value=input("Type date: ")
+    aux_epoch_date=float(value)# It is possible use float(aux)/1000
+    return {"Hora local COL: ":aux_epoch_date}
