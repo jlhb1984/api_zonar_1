@@ -691,8 +691,8 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-@app.post("/Hora Epoch a hora local")
-def Digitar_trama_de_combustible(value:str):
+@app.get("/Hora Epoch a hora local")
+def Digitar_hora_epoch(value:str):
     value=input("Type date: ")
     aux_epoch_date=float(value)# It is possible use float(aux)/1000
-    return {"Hora local COL: ":aux_epoch_date}
+    return {"Epoch: ":value,"Hora local COL: ":aux_epoch_date}
