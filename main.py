@@ -691,7 +691,7 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-@app.get("/Hora Epoch a hora local")
+@app.get("/Hora Epoch a hora UTC")
 def Digitar_hora_epoch(value:str):
     aux_epoch_date=float(value)# It is possible use float(aux)/1000
     col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
