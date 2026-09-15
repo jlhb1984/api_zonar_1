@@ -519,14 +519,14 @@ async def subir_excel_torch_odometro_velocidad(file: UploadFile):
 
     for i in range(0,df.shape[0]):
         ind_odometer=int(df.iloc[i,3])
-        if ind_odometer>80000000:
-            status.append(df.iloc[i,12])
-            odometer_data.append(int(df.iloc[i,3]))
-            #rpm_data.append(int(df.iloc[i,8]))
-            speed_data.append(int(df.iloc[i,6]))
-            #fuel_data.append((int(df.iloc[i,9],16) & 127))
-            date.append(df.iloc[i,4])
-            x_axis_odo_speed.append(i)
+        #if ind_odometer>80000000:
+        status.append(df.iloc[i,12])
+        odometer_data.append(int(df.iloc[i,3]))
+        #rpm_data.append(int(df.iloc[i,8]))
+        speed_data.append(int(df.iloc[i,6]))
+        #fuel_data.append((int(df.iloc[i,9],16) & 127))
+        date.append(df.iloc[i,4])
+        x_axis_odo_speed.append(i)
 
     for i in range(0,df.shape[0]):
         ind_speed=int(df.iloc[i,8])        
