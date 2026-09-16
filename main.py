@@ -12,8 +12,13 @@ app = FastAPI()
 
 @app.get("/Obtener iButton para Calamp")
 def Digitar_trama_con_iButton_para_calamp(value: str):
-    aux_device_id=value[92:108]
-    return("id: ",aux_device_id)
+    aux_device_cal=value[92:108]
+    return("id: ",aux_device_cal)
+
+@app.get("/Obtener iButton para TopFly")
+def Digitar_trama_con_iButton_para_topfly(value: str):
+    aux_device_tf=value[108:124]
+    return("id: ",aux_device_tf)
 
 @app.get("/Decodificar trama de combustible")
 def Digitar_trama_de_combustible(value:str):
