@@ -10,6 +10,11 @@ import matplotlib.pyplot as plt
 
 app = FastAPI()
 
+@app.get("/Obtener iButton")
+def Digitar_trama_con_iButton_in(value: str):
+    aux_device_id=value[108:124]
+    return("id: ",aux_device_id)
+
 @app.get("/Decodificar trama de combustible")
 def Digitar_trama_de_combustible(value:str):
     #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
