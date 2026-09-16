@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 app = FastAPI()
 
 @app.get("/Obtener iButton")
-def Digitar_trama_con_iButton_in(value: str):
+def Digitar_trama_con_iButton_in_calamp(value: str):
     aux_device_id=value[108:124]
     return("id: ",aux_device_id)
 
