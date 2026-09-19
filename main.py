@@ -752,3 +752,10 @@ def Digitar_hora_epoch(value:str):
     col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
     return {"Epoch: ":value,"Hora UTC: ":col_date}
 
+@app.post("/MRR para clientes extranjeros")
+async def subir_excel_mrr_extranjeros(file: UploadFile):
+    customer_foreign=pd.read_excel(file.file, engine='openpyxl')
+    aux_mrr=0.0
+    for i in range(0,customer_foreign.shape[0]):
+        aux_mrr=aux_mrr+customer_foreign.iloc[i,10]
+    return {"MRR foreign USD":aux_mrr}
