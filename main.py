@@ -8,6 +8,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LinearRegression
+
 app = FastAPI()
 
 @app.get("/Obtener iButton para Calamp")
@@ -68,6 +72,47 @@ async def subir_Excel_epsilon(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
     #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
+
+@app.post("/Regresión polinomial")
+async def subir_Excel_epsilon(file: UploadFile):
+    df=pd.read_excel(file.file, engine='openpyxl')    
+    X_poly=df['Measured'].values.reshape(-1,1)
+    y_poly=(df['User']*3.78541 ).values.reshape(-1,1)
+
+    # 2. Build a polynomial model (e.g., degree 2)
+    degree=2
+    model=make_pipeline(PolynomialFeatures(degree), LinearRegression())
+
+    # 3. Fit and predict
+    model.fit(X_poly, y_poly)
+
+    linear_step = model.named_steps['linearregression']
+    c = linear_step.intercept_
+    coefs = linear_step.coef_
+    b=coefs[0,1]
+    a=coefs[0,2]
+    c_=c[0]
+
+    stats_text = f"a:{a:.12f}\nb:{b:.12f}\nc:{c_:.12f}"    
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(X_poly, y_poly, 'o', label='Data points')    
+    ax[0].plot(X_poly, model.predict(X_poly), '-', label='Regression line')    
+    ax[0].set_xlabel('N code')
+    ax[0].set_title(stats_text)
+    ax[0].set_ylabel('Litros')    
+    ax[0].legend()
+    ax[1].plot(X_poly, df['User'])
+    ax[1].plot(X_poly, df['User'], 'o', label='Data points')
+    ax[1].set_xlabel('N code')
+    ax[1].set_ylabel('Galones')
+    ax[1].set_title('Información del técnico')
+    ax[1].legend()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
 
 @app.get("/Pasar litros a galones")
 def digitar_valor_en_litros(value:float):
@@ -706,3 +751,4 @@ def Digitar_hora_epoch(value:str):
     aux_epoch_date=float(value)# It is possible use float(aux)/1000
     col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
     return {"Epoch: ":value,"Hora UTC: ":col_date}
+
