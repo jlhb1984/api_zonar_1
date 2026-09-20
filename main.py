@@ -12,6 +12,8 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LinearRegression
 
+import requests
+
 app = FastAPI()
 
 @app.get("/Obtener iButton para Calamp")
@@ -752,10 +754,32 @@ def Digitar_hora_epoch(value:str):
     col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
     return {"Epoch: ":value,"Hora UTC: ":col_date}
 
-@app.post("/MRR para clientes extranjeros")
-async def subir_excel_mrr_extranjeros(file: UploadFile):
-    customer_foreign=pd.read_excel(file.file, engine='openpyxl')
-    aux_mrr=0.0
-    for i in range(0,customer_foreign.shape[0]):
-        aux_mrr=aux_mrr+customer_foreign.iloc[i,10]
-    return {"MRR foreign USD":aux_mrr}
+@app.post("/MRR LATAM")
+async def subir_excel_mrr_latam(file: UploadFile):
+    ubd=pd.read_excel(file.file, engine='openpyxl')   
+    tso_mobile_colombia=ubd[ubd['Dealer'].str.contains('TSO Mobile - Colombia')]
+    tso_mobile_peru=ubd[ubd['Dealer'].str.contains('TSO Mobile Peru')]
+    uts_sistemas_kalo=ubd[ubd['Dealer'].str.contains('UTS Sistemas Kalo MX')]
+    tso_mobile_colombia_ibo_idcom=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO IDCOM')]
+    tso_mobile_colombia_ibo_segtec=ubd[ubd['Dealer'].str.contains('TSO Colombia - IBO SEGTEC')]
+    jorge_garcia=ubd[ubd['Dealer'].str.contains('Jorge Garcia')]
+    tso_peru_fg_satelital_eirl=ubd[ubd['Dealer'].str.contains('TSO Peru -   FG SATELITAL EIRL')]
+    mym_global_security=ubd[ubd['Dealer'].str.contains('MYM GLOBAL SEGURITY SAS')]
+
+    col=pd.concat([tso_mobile_colombia,tso_mobile_colombia_ibo_idcom,tso_mobile_colombia_ibo_segtec])
+    per=pd.concat([tso_mobile_peru,tso_peru_fg_satelital_eirl])
+    mex=uts_sistemas_kalo
+
+    url = "https://www.datos.gov.co/resource/ceyp-9c7c.json?$limit=1&$order=vigenciadesde DESC"
+    response = requests.get(url)
+
+    data = response.json()
+    trm = float(data[0]["valor"])
+    print(f"Current TRM: {trm} COP/USD")
+
+    cop_mrr=col['Monthly Fee'].sum()
+    #conversion=float(input("Enter TRM: "))
+    cop_usd=cop_mrr/trm
+    mex_mrr=mex['Monthly Fee'].sum()
+    per_mrr=per['Monthly Fee'].sum()
+    return {"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
