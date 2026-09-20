@@ -783,3 +783,24 @@ async def subir_excel_mrr_latam(file: UploadFile):
     mex_mrr=mex['Monthly Fee'].sum()
     per_mrr=per['Monthly Fee'].sum()
     return {"TRM":trm,"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
+
+@app.post("/MRR para clientes de Colombia")
+async def subir_excel_customer_units_colombia(file: UploadFile):
+    customer_col=pd.read_excel(file.file, engine='openpyxl')
+    url = "https://www.datos.gov.co/resource/ceyp-9c7c.json?$limit=1&$order=vigenciadesde DESC"
+    response = requests.get(url)
+    data = response.json()
+    trm = float(data[0]["valor"])
+    aux_mrr=0.0
+    for i in range(0,customer_col.shape[0]):
+        aux_mrr=aux_mrr+customer_col.iloc[i,10]
+    aux_mrr=aux_mrr/trm
+    return {"TRM":trm,"MRR Col USD":aux_mrr}
+
+@app.post("/MRR para clientes extranjeros")
+async def subir_excel_customer_units_extranjeros(file: UploadFile):
+    customer_foreign=pd.read_excel(file.file, engine='openpyxl')
+    aux_mrr=0.0
+    for i in range(0,customer_foreign.shape[0]):
+        aux_mrr=aux_mrr+customer_foreign.iloc[i,10]
+    return {"MRR foreign USD":aux_mrr}
