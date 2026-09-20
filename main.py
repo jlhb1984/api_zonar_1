@@ -782,4 +782,4 @@ async def subir_excel_mrr_latam(file: UploadFile):
     cop_usd=cop_mrr/trm
     mex_mrr=mex['Monthly Fee'].sum()
     per_mrr=per['Monthly Fee'].sum()
-    return {"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
+    return {"TRM":trm,"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
