@@ -20,7 +20,7 @@ app = FastAPI()
 def Digitar_trama_con_iButton_para_calamp(value: str):
     aux_device_cal_1=value[116:124]+value[108:116] #more than 3 accum
     aux_device_cal_2=value[100:108]+value[92:100]  #5 accum
-    return("id_1: ",aux_device_cal_1,"id_2:",aux_device_cal_2)
+    return("id_1: ",aux_device_cal_1,"id_2: ",aux_device_cal_2)
 
 @app.get("/Obtener iButton para TopFly")
 def Digitar_trama_con_iButton_para_topfly(value: str):
