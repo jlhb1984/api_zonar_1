@@ -57,6 +57,7 @@ async def subir_Excel_epsilon(file: UploadFile):
     "X-Coefficient": str(slope)
     }
 
+    linear_r.append({"intercept": intercept, "coefficient": slope})
     stats_text = f"Slope (m): {slope:.4f}\nIntercept (b): {intercept:.4f}"    
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
@@ -81,6 +82,7 @@ async def subir_Excel_epsilon(file: UploadFile):
 
 @app.post("/Regresión polinomial")
 async def subir_Excel_epsilon(file: UploadFile):
+    #Upload file and read it into a DataFrame
     df=pd.read_excel(file.file, engine='openpyxl')    
     X_poly=df['Measured'].values.reshape(-1,1)
     y_poly=(df['User']*3.78541 ).values.reshape(-1,1)
@@ -99,6 +101,7 @@ async def subir_Excel_epsilon(file: UploadFile):
     a=coefs[0,2]
     c_=c[0]
 
+    polinomial_r.append({"intercept": c_, "coefficient_1": b, "coefficient_2": a})
     stats_text = f"a:{a:.12f}\nb:{b:.12f}\nc:{c_:.12f}"    
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
