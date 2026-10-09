@@ -123,7 +123,7 @@ async def subir_Excel_epsilon(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.get("/Obtener pendiente e intercepto de regresión lineal")
+@app.get("/Obtener m y b de regresión lineal")
 def obtener_pendiente_e_intercepto():
     if linear_r:
         last_regression = linear_r[-1]
@@ -131,7 +131,7 @@ def obtener_pendiente_e_intercepto():
     else:
         return {"message": "No regression data available."}
 
-@app.get("/Obtener pendiente e intercepto de regresión polinomial")
+@app.get("/Obtener a, b, c de regresión polinomial")
 def obtener_pendiente_e_intercepto_polinomial():
     if polinomial_r:
         last_regression = polinomial_r[-1]
